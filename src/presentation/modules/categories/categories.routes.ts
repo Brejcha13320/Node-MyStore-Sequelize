@@ -1,16 +1,16 @@
 import { Router } from "express";
 import {
   ValidatorSchema,
-  createCustomerSchema,
-  updateCustomerSchema,
+  createCategorySchema,
+  updateCategorySchema,
 } from "../../../domain";
-import { UsersController } from "./users.controller";
+import { CategoriesController } from "./categories.controller";
 
-export class UsersRoutes {
+export class CategoriesRoutes {
   static get routes(): Router {
     const router = Router();
 
-    const controller = new UsersController();
+    const controller = new CategoriesController();
 
     // Definir las rutas
     router.get("/", controller.getAll);
@@ -19,13 +19,13 @@ export class UsersRoutes {
 
     router.post(
       "/",
-      [ValidatorSchema.valid(createCustomerSchema, "body")],
+      [ValidatorSchema.valid(createCategorySchema, "body")],
       controller.create,
     );
 
     router.patch(
       "/:id",
-      [ValidatorSchema.valid(updateCustomerSchema, "body")],
+      [ValidatorSchema.valid(updateCategorySchema, "body")],
       controller.update,
     );
 

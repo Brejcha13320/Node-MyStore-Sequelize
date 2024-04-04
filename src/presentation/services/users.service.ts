@@ -3,11 +3,15 @@ import { CreateUser, UpdateUser, UserModel } from "../../domain";
 
 export class UsersService {
   async getAll() {
-    return await UserModel.findAll();
+    return await UserModel.findAll({
+      include: ["customer"],
+    });
   }
 
   async getById(id: string) {
-    const user = await UserModel.findByPk(id);
+    const user = await UserModel.findByPk(id, {
+      include: ["customer"],
+    });
     if (!user) throw boom.notFound("El id del usuario no existe");
     return user;
   }
@@ -23,7 +27,7 @@ export class UsersService {
   }
 
   async create(data: CreateUser) {
-    //await this.getByEmail(data.email);
+    await this.getByEmail(data.email);
     return await UserModel.create(data);
   }
 

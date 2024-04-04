@@ -24,7 +24,12 @@ export class Server {
 
   async start() {
     //* Conection Database
-    await sequelize.authenticate();
+    try {
+      await sequelize.authenticate();
+      console.log("Databse Online - MariaDB");
+    } catch (error: any) {
+      throw new Error(error);
+    }
 
     //* Middlewares
     this.app.use(cors());

@@ -4,13 +4,13 @@ import {
   createCustomerSchema,
   updateCustomerSchema,
 } from "../../../domain";
-import { UsersController } from "./users.controller";
+import { CustomersController } from "./customers.controller";
 
-export class UsersRoutes {
+export class CustomersRoutes {
   static get routes(): Router {
     const router = Router();
 
-    const controller = new UsersController();
+    const controller = new CustomersController();
 
     // Definir las rutas
     router.get("/", controller.getAll);
