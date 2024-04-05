@@ -12,7 +12,7 @@ export class CategoriesService {
     const category = await CategoryModel.findByPk(id, {
       include: ["products"],
     });
-    if (!category) throw boom.notFound("El id del usuario no existe");
+    if (!category) throw boom.notFound("El id de la categoria no existe");
     return category;
   }
 

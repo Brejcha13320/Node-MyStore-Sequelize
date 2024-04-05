@@ -4,15 +4,15 @@ import { CreateCustomer, UpdateCustomer, CustomerModel } from "../../domain";
 export class CustomersService {
   async getAll() {
     return await CustomerModel.findAll({
-      include: ["user"],
+      include: ["user", "orders"],
     });
   }
 
   async getById(id: string) {
     const customer = await CustomerModel.findByPk(id, {
-      include: ["user"],
+      include: ["user", "orders"],
     });
-    if (!customer) throw boom.notFound("El id del usuario no existe");
+    if (!customer) throw boom.notFound("El id de customer no existe");
     return customer;
   }
 

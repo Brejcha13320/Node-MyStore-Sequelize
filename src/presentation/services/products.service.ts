@@ -1,18 +1,28 @@
 import * as boom from "@hapi/boom";
 import { CreateProduct, UpdateProduct, ProductModel } from "../../domain";
+import { Op } from "sequelize";
 
 export class ProductsService {
-  async getAll() {
-    return await ProductModel.findAll({
+  async getAll(query: any) {
+    const options: any = {
       include: ["category"],
-    });
+      where: {},
+    };
+
+    const { limit, offset } = query;
+    if (limit ?? offset) {
+      options.limit = Number(limit);
+      options.offset = Number(offset);
+    }
+
+    return await ProductModel.findAll(options);
   }
 
   async getById(id: string) {
     const product = await ProductModel.findByPk(id, {
       include: ["category"],
     });
-    if (!product) throw boom.notFound("El id del usuario no existe");
+    if (!product) throw boom.notFound("El id del producto no existe");
     return product;
   }
 

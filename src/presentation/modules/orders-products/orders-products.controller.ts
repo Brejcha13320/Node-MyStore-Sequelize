@@ -1,45 +1,45 @@
 import { Request, Response } from "express";
 import { HandleError } from "../../../domain";
-import { ProductsService } from "../../services";
+import { OrdersProductsService } from "../../services";
 
-export class ProductsController {
-  productsService = new ProductsService();
+export class OrdersProductsController {
+  ordersProductsService = new OrdersProductsService();
 
   getAll = (req: Request, res: Response) => {
-    this.productsService
-      .getAll(req.query)
-      .then((products) => res.status(201).json(products))
+    this.ordersProductsService
+      .getAll()
+      .then((ordersProducts) => res.status(201).json(ordersProducts))
       .catch((error) => HandleError.error(error, res));
   };
 
   getById = (req: Request, res: Response) => {
     const { id } = req.params;
-    this.productsService
+    this.ordersProductsService
       .getById(id)
-      .then((product) => res.status(201).json(product))
+      .then((orderProduct) => res.status(201).json(orderProduct))
       .catch((error) => HandleError.error(error, res));
   };
 
   create = (req: Request, res: Response) => {
-    this.productsService
+    this.ordersProductsService
       .create(req.body)
-      .then((product) => res.status(201).json(product))
+      .then((orderProduct) => res.status(201).json(orderProduct))
       .catch((error) => HandleError.error(error, res));
   };
 
   update = (req: Request, res: Response) => {
     const { id } = req.params;
-    this.productsService
+    this.ordersProductsService
       .update(id, req.body)
-      .then((product) => res.status(201).json(product))
+      .then((orderProduct) => res.status(201).json(orderProduct))
       .catch((error) => HandleError.error(error, res));
   };
 
   delete = (req: Request, res: Response) => {
     const { id } = req.params;
-    this.productsService
+    this.ordersProductsService
       .delete(id)
-      .then((product) => res.status(201).json(product))
+      .then((orderProduct) => res.status(201).json(orderProduct))
       .catch((error) => HandleError.error(error, res));
   };
 }

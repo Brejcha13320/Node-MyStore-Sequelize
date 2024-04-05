@@ -2,6 +2,7 @@ import { DataTypes } from "sequelize";
 import sequelize from "../../database";
 import { UuidAdapter } from "../../config";
 import { Product } from "../interfaces/products.interface";
+import { OrderProduct } from "../interfaces/orders-products.interface";
 
 const UserModel = sequelize.define("users", {
   id: {
@@ -77,6 +78,62 @@ const ProductModel = sequelize.define("products", {
   },
 });
 
+const OrderModel = sequelize.define("orders", {
+  id: {
+    type: DataTypes.UUID,
+    allowNull: false,
+    primaryKey: true,
+    defaultValue: UuidAdapter.v4(),
+  },
+  customerId: {
+    allowNull: false,
+    type: DataTypes.UUID,
+    references: {
+      model: "customers",
+      key: "id",
+    },
+    onUpdate: "CASCADE",
+    onDelete: "SET NULL",
+  },
+  total: {
+    type: DataTypes.VIRTUAL,
+    get() {
+      if ((this.getDataValue("items") as any[]).length > 0) {
+        return (this.getDataValue("items") as any[]).reduce((total, item) => {
+          return total + item.price * item.ordersProducts.amount;
+        }, 0);
+      }
+      return 0;
+    },
+  },
+});
+
+const OrderProductModel = sequelize.define("ordersProducts", {
+  id: {
+    type: DataTypes.UUID,
+    allowNull: false,
+    primaryKey: true,
+    defaultValue: UuidAdapter.v4(),
+  },
+  amount: { allowNull: false, type: DataTypes.INTEGER },
+  orderId: {
+    field: "orderId",
+    allowNull: false,
+    type: DataTypes.UUID,
+    references: { model: "orders", key: "id" },
+    onUpdate: "CASCADE",
+    onDelete: "SET NULL",
+  },
+  productId: {
+    field: "productId",
+    allowNull: false,
+    type: DataTypes.UUID,
+    references: { model: "products", key: "id" },
+    onUpdate: "CASCADE",
+    onDelete: "SET NULL",
+  },
+});
+
 // Customer < One to One > User
 CustomerModel.belongsTo(UserModel, { as: "user" });
 UserModel.hasOne(CustomerModel, { as: "customer", foreignKey: "userId" });
@@ -88,4 +145,25 @@ CategoryModel.hasMany(ProductModel, {
 });
 ProductModel.belongsTo(CategoryModel, { as: "category" });
 
-export { UserModel, CustomerModel, CategoryModel, ProductModel };
+// Order < One to Many > Customer
+CustomerModel.hasMany(OrderModel, { as: "orders", foreignKey: "customerId" });
+OrderModel.belongsTo(CustomerModel, { as: "customer" });
+
+// Order < Many to Many > Product
+OrderModel.belongsToMany(ProductModel, {
+  as: "items",
+  through: "ordersProducts",
+});
+ProductModel.belongsToMany(OrderModel, {
+  as: "items",
+  through: "ordersProducts",
+});
+
+export {
+  UserModel,
+  CustomerModel,
+  CategoryModel,
+  ProductModel,
+  OrderModel,
+  OrderProductModel,
+};

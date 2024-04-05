@@ -2,6 +2,7 @@ import { Router } from "express";
 import {
   ValidatorSchema,
   createProductSchema,
+  queryProductSchema,
   updateProductSchema,
 } from "../../../domain";
 import { ProductsController } from "./products.controller";
@@ -13,7 +14,11 @@ export class ProductsRoutes {
     const controller = new ProductsController();
 
     // Definir las rutas
-    router.get("/", controller.getAll);
+    router.get(
+      "/",
+      [ValidatorSchema.valid(queryProductSchema, "query")],
+      controller.getAll,
+    );
 
     router.get("/:id", controller.getById);
 

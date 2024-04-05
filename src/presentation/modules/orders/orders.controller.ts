@@ -1,45 +1,45 @@
 import { Request, Response } from "express";
 import { HandleError } from "../../../domain";
-import { ProductsService } from "../../services";
+import { OrdersService } from "../../services/orders.service";
 
-export class ProductsController {
-  productsService = new ProductsService();
+export class OrdersController {
+  ordersService = new OrdersService();
 
   getAll = (req: Request, res: Response) => {
-    this.productsService
-      .getAll(req.query)
-      .then((products) => res.status(201).json(products))
+    this.ordersService
+      .getAll()
+      .then((orders) => res.status(201).json(orders))
       .catch((error) => HandleError.error(error, res));
   };
 
   getById = (req: Request, res: Response) => {
     const { id } = req.params;
-    this.productsService
+    this.ordersService
       .getById(id)
-      .then((product) => res.status(201).json(product))
+      .then((order) => res.status(201).json(order))
       .catch((error) => HandleError.error(error, res));
   };
 
   create = (req: Request, res: Response) => {
-    this.productsService
+    this.ordersService
       .create(req.body)
-      .then((product) => res.status(201).json(product))
+      .then((order) => res.status(201).json(order))
       .catch((error) => HandleError.error(error, res));
   };
 
   update = (req: Request, res: Response) => {
     const { id } = req.params;
-    this.productsService
+    this.ordersService
       .update(id, req.body)
-      .then((product) => res.status(201).json(product))
+      .then((order) => res.status(201).json(order))
       .catch((error) => HandleError.error(error, res));
   };
 
   delete = (req: Request, res: Response) => {
     const { id } = req.params;
-    this.productsService
+    this.ordersService
       .delete(id)
-      .then((product) => res.status(201).json(product))
+      .then((order) => res.status(201).json(order))
       .catch((error) => HandleError.error(error, res));
   };
 }
