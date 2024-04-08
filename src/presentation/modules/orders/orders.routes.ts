@@ -5,12 +5,16 @@ import {
   updateOrderSchema,
 } from "../../../domain";
 import { OrdersController } from "./orders.controller";
+import { AuthMiddleware } from "../../middlewares";
 
 export class OrdersRoutes {
   static get routes(): Router {
     const router = Router();
 
     const controller = new OrdersController();
+
+    //Middlewares Para Todas las Rutas
+    router.use([AuthMiddleware.validateToken]);
 
     // Definir las rutas
     router.get("/", controller.getAll);

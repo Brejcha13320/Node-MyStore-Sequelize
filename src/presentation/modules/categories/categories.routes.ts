@@ -5,6 +5,7 @@ import {
   updateCategorySchema,
 } from "../../../domain";
 import { CategoriesController } from "./categories.controller";
+import { AuthMiddleware, ValidRoleMiddleware } from "../../middlewares";
 
 export class CategoriesRoutes {
   static get routes(): Router {
@@ -12,24 +13,45 @@ export class CategoriesRoutes {
 
     const controller = new CategoriesController();
 
-    // Definir las rutas
-    router.get("/", controller.getAll);
+    //Middlewares Para Todas las Rutas
+    router.use([AuthMiddleware.validateToken]);
 
-    router.get("/:id", controller.getById);
+    // Definir las rutas
+    router.get(
+      "/",
+      [ValidRoleMiddleware.validateRole(["admin", "seller", "customer"])],
+      controller.getAll,
+    );
+
+    router.get(
+      "/:id",
+      [ValidRoleMiddleware.validateRole(["admin", "seller", "customer"])],
+      controller.getById,
+    );
 
     router.post(
       "/",
-      [ValidatorSchema.valid(createCategorySchema, "body")],
+      [
+        ValidRoleMiddleware.validateRole(["admin"]),
+        ValidatorSchema.valid(createCategorySchema, "body"),
+      ],
       controller.create,
     );
 
     router.patch(
       "/:id",
-      [ValidatorSchema.valid(updateCategorySchema, "body")],
+      [
+        ValidRoleMiddleware.validateRole(["admin", "seller"]),
+        ValidatorSchema.valid(updateCategorySchema, "body"),
+      ],
       controller.update,
     );
 
-    router.delete("/:id", controller.delete);
+    router.delete(
+      "/:id",
+      [ValidRoleMiddleware.validateRole(["admin", "seller"])],
+      controller.delete,
+    );
 
     return router;
   }

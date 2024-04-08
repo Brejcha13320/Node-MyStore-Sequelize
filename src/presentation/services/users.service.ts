@@ -1,5 +1,6 @@
 import * as boom from "@hapi/boom";
-import { CreateUser, UpdateUser, UserModel } from "../../domain";
+import { CreateUser, UpdateUser, UserEntity, UserModel } from "../../domain";
+import { bcryptAdapter } from "../../config";
 
 export class UsersService {
   async getAll() {
@@ -28,7 +29,18 @@ export class UsersService {
 
   async create(data: CreateUser) {
     await this.getByEmail(data.email);
-    return await UserModel.create(data);
+
+    //Encriptar Password
+    const passwordEncripted = bcryptAdapter.hash(data.password);
+
+    const createUser: CreateUser = {
+      ...data,
+      password: passwordEncripted,
+    };
+
+    const user = await UserModel.create(createUser);
+    const { password, ...userEntity } = UserEntity.fromObject(user);
+    return userEntity;
   }
 
   async update(id: string, data: UpdateUser) {

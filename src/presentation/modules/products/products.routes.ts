@@ -6,12 +6,16 @@ import {
   updateProductSchema,
 } from "../../../domain";
 import { ProductsController } from "./products.controller";
+import { AuthMiddleware } from "../../middlewares";
 
 export class ProductsRoutes {
   static get routes(): Router {
     const router = Router();
 
     const controller = new ProductsController();
+
+    //Middlewares Para Todas las Rutas
+    router.use([AuthMiddleware.validateToken]);
 
     // Definir las rutas
     router.get(

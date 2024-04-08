@@ -1,15 +1,13 @@
-import { DataTypes } from "sequelize";
+import { DataTypes, UUIDV4 } from "sequelize";
 import sequelize from "../../database";
 import { UuidAdapter } from "../../config";
-import { Product } from "../interfaces/products.interface";
-import { OrderProduct } from "../interfaces/orders-products.interface";
 
 const UserModel = sequelize.define("users", {
   id: {
     type: DataTypes.UUID,
     allowNull: false,
     primaryKey: true,
-    defaultValue: UuidAdapter.v4(),
+    defaultValue: UUIDV4,
   },
   email: {
     type: DataTypes.STRING,
@@ -32,7 +30,7 @@ const CustomerModel = sequelize.define("customers", {
     type: DataTypes.UUID,
     allowNull: false,
     primaryKey: true,
-    defaultValue: UuidAdapter.v4(),
+    defaultValue: UUIDV4,
   },
   name: { allowNull: false, type: DataTypes.STRING },
   lastName: { allowNull: false, type: DataTypes.STRING },
@@ -52,7 +50,7 @@ const CategoryModel = sequelize.define("categories", {
     type: DataTypes.UUID,
     allowNull: false,
     primaryKey: true,
-    defaultValue: UuidAdapter.v4(),
+    defaultValue: UUIDV4,
   },
   name: { type: DataTypes.STRING, unique: true, allowNull: false },
   image: { type: DataTypes.STRING, allowNull: false },
@@ -63,7 +61,7 @@ const ProductModel = sequelize.define("products", {
     type: DataTypes.UUID,
     allowNull: false,
     primaryKey: true,
-    defaultValue: UuidAdapter.v4(),
+    defaultValue: UUIDV4,
   },
   name: { type: DataTypes.STRING, allowNull: false },
   image: { type: DataTypes.STRING, allowNull: false },
@@ -83,7 +81,7 @@ const OrderModel = sequelize.define("orders", {
     type: DataTypes.UUID,
     allowNull: false,
     primaryKey: true,
-    defaultValue: UuidAdapter.v4(),
+    defaultValue: UUIDV4,
   },
   customerId: {
     allowNull: false,
@@ -113,7 +111,7 @@ const OrderProductModel = sequelize.define("ordersProducts", {
     type: DataTypes.UUID,
     allowNull: false,
     primaryKey: true,
-    defaultValue: UuidAdapter.v4(),
+    defaultValue: UUIDV4,
   },
   amount: { allowNull: false, type: DataTypes.INTEGER },
   orderId: {

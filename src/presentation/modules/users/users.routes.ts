@@ -1,8 +1,8 @@
 import { Router } from "express";
 import {
   ValidatorSchema,
-  createCustomerSchema,
-  updateCustomerSchema,
+  createUserSchema,
+  updateUserSchema,
 } from "../../../domain";
 import { UsersController } from "./users.controller";
 
@@ -19,13 +19,13 @@ export class UsersRoutes {
 
     router.post(
       "/",
-      [ValidatorSchema.valid(createCustomerSchema, "body")],
+      [ValidatorSchema.valid(createUserSchema, "body")],
       controller.create,
     );
 
     router.patch(
       "/:id",
-      [ValidatorSchema.valid(updateCustomerSchema, "body")],
+      [ValidatorSchema.valid(updateUserSchema, "body")],
       controller.update,
     );
 

@@ -12,6 +12,7 @@ export * from "./schema/category.schema";
 export * from "./schema/product.schema";
 export * from "./schema/order.schema";
 export * from "./schema/order-product.schema";
+export * from "./schema/auth.schema";
 
 //* Interfaces
 export * from "./interfaces/users.interface";
@@ -20,3 +21,7 @@ export * from "./interfaces/categories.interface";
 export * from "./interfaces/products.interface";
 export * from "./interfaces/orders.interface";
 export * from "./interfaces/orders-products.interface";
+export * from "./interfaces/auth.interface";
+
+//* Entities
+export * from "./entities/user.entity";
